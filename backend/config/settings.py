@@ -93,14 +93,25 @@ REST_FRAMEWORK = {
 
 ALLOWED_HOSTS = [
     "zapatrack-api.onrender.com",
+    "zapatrack_api.onrender.com", # Added in case underscore is used
+    "localhost",
+    "127.0.0.1",
 ]
 
 # CORS
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
+    'https://femtowhahaha.github.io',
 ]
 CORS_ALLOW_ALL_ORIGINS = DEBUG
+
+# CSRF
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'https://femtowhahaha.github.io',
+]
 
 # Localization
 LANGUAGE_CODE = 'en-us'
