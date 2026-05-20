@@ -15,6 +15,7 @@ ALLOWED_HOSTS = ['*']
 
 # Installed apps
 INSTALLED_APPS = [
+    "corsheaders",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
 # Middleware
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -90,6 +92,10 @@ REST_FRAMEWORK = {
     ],
 }
 
+ALLOWED_HOSTS = [
+    "zapatrack-api.onrender.com",
+]
+
 # CORS
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
@@ -104,6 +110,9 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files
-STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATIC_URL = "/static/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
