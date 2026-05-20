@@ -11,7 +11,7 @@ load_dotenv(BASE_DIR / ".env")
 # Security
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
-ALLOWED_HOSTS = ['*']
+
 
 # Installed apps
 INSTALLED_APPS = [
