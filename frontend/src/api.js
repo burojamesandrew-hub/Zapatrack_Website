@@ -40,7 +40,7 @@ async function req(path, opts = {}) {
     return data;
   } catch (err) {
     if (err instanceof TypeError) {
-      const msg = 'Connection error: Unable to reach the server. Please check if the barangay server is running. (Backend should be on http://localhost:8000)';
+      const msg = `Connection error: Unable to reach the server at ${BASE}. Please check if the backend server is running.`;
       console.error('[API] Connection failed:', msg);
       throw new Error(msg);
     }

@@ -10,20 +10,60 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from psycopg2 import pool
 from dotenv import load_dotenv
+from pathlib import Path
 
-load_dotenv()
+# Load .env from the backend directory (where manage.py is)
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
 _pool = None
 
 
 def init_pool():
     global _pool
+    db_url = os.getenv('DATABASE_URL')
+    
     try:
-        _pool = pool.SimpleConnectionPool(
-            minconn=1,
-            maxconn=5,
-            dsn=os.getenv('DATABASE_URL'),
-        )
+        if db_url:
+            print(f'[DB] Initializing pool using DATABASE_URL')
+            _pool = pool.SimpleConnectionPool(
+                minconn=1,
+                maxconn=5,
+                dsn=db_url,
+            )
+        else:
+            db_name = os.getenv('DB_NAME')
+            db_user = os.getenv('DB_USER')
+            db_password = os.getenv('DB_PASSWORD')
+            db_host = os.getenv('DB_HOST', 'localhost')
+            db_port = os.getenv('DB_PORT', '5432')
+            
+            if not all([db_name, db_user]):
+                print('[DB] Missing database configuration (DATABASE_URL or DB_NAME/DB_USER).')
+                _pool = None
+                return
+
+            print(f'[DB] Initializing pool using individual variables (Host: {db_host})')
+            
+            # Neon DB usually requires sslmode=require.
+            # We automatically add it if the host contains 'neon.tech' or DB_SSL=True
+            connect_kwargs = {
+                'dbname': db_name,
+                'user': db_user,
+                'password': db_password,
+                'host': db_host,
+                'port': db_port,
+            }
+            if os.getenv('DB_SSL', 'False') == 'True' or 'neon.tech' in db_host:
+                connect_kwargs['sslmode'] = 'require'
+                print('[DB] SSL mode: require')
+
+            _pool = pool.SimpleConnectionPool(
+                minconn=1,
+                maxconn=5,
+                **connect_kwargs
+            )
+        print('[DB] Pool initialized successfully.')
     except Exception as e:
         print(f'[DB] Pool init failed: {e}')
         _pool = None
