@@ -52,3 +52,39 @@
 }
 .nav-link:hover { background: #1A3D6E; color: #fff; text-decoration: none; }
 .nav-link.active { background: #1E5CB3; color: #fff; font-weight: 600; }
+
+@media (max-width: 700px) {
+  .navbar-inner {
+    height: auto;
+    min-height: 58px;
+    padding: 10px 14px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .navbar-brand {
+    min-width: 0;
+    flex: 1 1 100%;
+  }
+
+  .brand-title {
+    font-size: 12px;
+  }
+
+  .brand-sub {
+    font-size: 9px;
+  }
+
+  .navbar-links {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .nav-link {
+    text-align: center;
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+}
