@@ -95,7 +95,7 @@ REST_FRAMEWORK = {
 }
 
 ALLOWED_HOSTS = [
-    "zapatrack-api.onrender.com",
+    "zapatrack-api-q34y.onrender.com",
     #"zapatrack_api.onrender.com", # Added in case underscore is used
     "localhost",
     "127.0.0.1",
