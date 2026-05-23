@@ -1,3 +1,6 @@
+const res = await fetch(`${import.meta.env.VITE_API_URL}/api/status`);
+const data = await res.json();
+
 const BASE = import.meta.env.VITE_API_URL || '/api';
 
 async function req(path, opts = {}) {
