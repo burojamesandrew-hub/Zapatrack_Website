@@ -127,6 +127,7 @@
 .detail-val {
   padding: 8px 0 8px 12px; font-size: 13px; color: #1E293B;
   border-bottom: 1px solid #F1F5F9;
+  word-break: break-word;
 }
 tr:last-child .detail-key, tr:last-child .detail-val { border-bottom: none; }
 

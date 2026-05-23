@@ -24,9 +24,20 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body { min-height: 100svh; }
 
-#root { min-height: 100svh; display: flex; flex-direction: column; }
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  overflow-x: hidden;
+}
 
 a { color: var(--blue); text-decoration: none; }
 a:hover { text-decoration: underline; }
