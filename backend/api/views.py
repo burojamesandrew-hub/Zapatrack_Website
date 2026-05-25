@@ -108,7 +108,16 @@ def get_request(request, request_id):
             detail=query("SELECT reason,monthly_income,num_dependents,for_medical,for_scholarship,for_burial,for_legal_aid,for_government_aid,beneficiary_name,beneficiary_relation,requesting_institution FROM indigency_details WHERE request_id=%s",(rid,)); data['detail']=_s(detail)
         elif ct=='Certificate of Residency':
             detail=query("SELECT purpose,years_of_residency,months_of_residency,born_in_barangay,previous_address,requested_for,requested_for_relation,for_enrollment,for_employment,for_voter_reg,for_bank,for_utility,requesting_institution FROM residency_details WHERE request_id=%s",(rid,)); data['detail']=_s(detail)
-        logs=query("SELECT sl.old_status,sl.new_status,sl.notes,sl.changed_at,s.full_name AS changed_by FROM status_logs sl JOIN staff s ON s.id=sl.changed_by WHERE sl.request_id=%s ORDER BY sl.changed_at ASC",(rid,),many=True)
+        logs=query(
+            "SELECT sl.old_status, sl.new_status, sl.notes, sl.changed_at, "
+            "COALESCE(s.full_name, 'System') AS changed_by "
+            "FROM status_logs sl "
+            "LEFT JOIN staff s ON s.id = sl.changed_by "
+            "WHERE sl.request_id=%s "
+            "ORDER BY sl.changed_at ASC",
+            (rid,),
+            many=True
+        )
         data['status_log']=_sm(logs)
         qr=query('SELECT qr_data,image_path FROM qr_codes WHERE request_id=%s',(rid,)); data['qr']=_s(qr)
         return Response(data)
