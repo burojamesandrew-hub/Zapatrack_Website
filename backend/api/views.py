@@ -7,7 +7,7 @@ from psycopg2.extras import RealDictCursor
 
 PICKUP_TIME_SLOTS = ['8:00 AM – 9:00 AM','9:00 AM – 10:00 AM','10:00 AM – 11:00 AM','1:00 PM – 2:00 PM','2:00 PM – 3:00 PM','3:00 PM – 4:00 PM']
 
-@api_view(['GET'])
+@api_view(['GET', 'HEAD'])
 def health_check(request):
     """Check if server and database are running."""
     try:
@@ -177,20 +177,16 @@ def api_not_found(request, path=None):
         status=drf_status.HTTP_404_NOT_FOUND,
     )
 
-# Custom 404 handler for the entire app
 def handler404(request, exception=None):
-    from rest_framework.response import Response
-    from rest_framework import status
-    return Response(
+    from django.http import JsonResponse
+    return JsonResponse(
         {'error': 'Page or API endpoint not found.'},
-        status=status.HTTP_404_NOT_FOUND,
+        status=404,
     )
 
-# Custom 500 handler for the entire app
 def handler500(request):
-    from rest_framework.response import Response
-    from rest_framework import status
-    return Response(
+    from django.http import JsonResponse
+    return JsonResponse(
         {'error': 'Internal server error. Please contact the barangay office.'},
-        status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        status=500,
     )
