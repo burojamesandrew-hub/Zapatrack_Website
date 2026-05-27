@@ -340,5 +340,15 @@ function CertDetail({ cert, detail }) {
     <DetailRow label="Requested For" value={detail.requested_for || 'Self'} />
     <DetailRow label="Institution"   value={detail.requesting_institution || '—'} />
   </>;
+  if (['BUS. PERMIT', 'BUS. CLEARANCE NEW', 'BUS. CLEARANCE RENEWAL'].includes(cert)) return <>
+    <DetailRow label="Purpose"          value={detail.purpose || '—'} />
+    <DetailRow label="Business Name"    value={detail.business_name || '—'} />
+    <DetailRow label="Nature of Biz"    value={detail.nature_of_business || '—'} />
+    <DetailRow label="Contact Number"   value={detail.business_contact_number || '—'} />
+    <DetailRow label="Capital Invested" value={detail.capital_invested || '—'} />
+    <DetailRow label="Gross Sales"      value={detail.gross_sales || '—'} />
+    <DetailRow label="Fee"              value={detail.fee_amount ? `₱${detail.fee_amount}` : '—'} />
+    <DetailRow label="Doc Stamps"       value={detail.doc_stamps ? `₱${detail.doc_stamps}` : '—'} />
+  </>;
   return null;
 }

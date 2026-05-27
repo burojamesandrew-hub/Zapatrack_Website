@@ -45,31 +45,34 @@ def _sm(rows):
         print(f'[API] Error serializing rows: {e}')
         raise RuntimeError(f'Data serialization error: {str(e)}')
 
-@api_view(['GET'])
+@api_view(['GET', 'HEAD'])
 def get_status(request, request_id):
-
-    row = query("SELECT request_id,request_id_text,resident_name,cert_type,status,purpose,date_requested,pickup_date,pickup_time_slot,pickup_status FROM v_requests_overview WHERE request_id_text=%s",(str(request_id).strip(),))
-    if not row: return Response({'error':'Request not found. Please check your Request ID.'},status=drf_status.HTTP_404_NOT_FOUND)
-    return Response(_s(row))
-
     try:
         rid = str(request_id).strip()
-        print(f'[API] get_status called with request_id={rid}')
         row = query(
-            "SELECT request_id, resident_name, cert_type, status, purpose, "
-            "date_requested, pickup_date, pickup_time_slot "
-            "FROM v_resident_status WHERE request_id::TEXT=%s",
+            """
+            SELECT 
+                v.request_id, v.request_id_text, v.resident_name,
+                v.cert_type, v.status, v.purpose, v.date_requested,
+                a.pickup_date, a.pickup_time_slot, a.pickup_status
+            FROM v_requests_overview v
+            LEFT JOIN appointments a ON a.request_id = v.request_id
+            WHERE v.request_id_text = %s
+            """,
             (rid,)
         )
-        if not row: 
-            return Response({'error':'Request not found. Please check your Request ID or try the QR code scanner.'},status=drf_status.HTTP_404_NOT_FOUND)
+        if not row:
+            return Response(
+                {'error': 'Request not found. Please check your Request ID.'},
+                status=drf_status.HTTP_404_NOT_FOUND
+            )
         return Response(_s(row))
     except Exception as e:
         print(f'[API] get_status error: {e}')
-        import traceback
-        traceback.print_exc()
-        return Response({'error': f'Server error: {str(e)}. Please contact the barangay office for assistance.'}, status=drf_status.HTTP_500_INTERNAL_SERVER_ERROR)
-      
+        return Response(
+            {'error': f'Server error: {str(e)}. Please contact the barangay office for assistance.'},
+            status=drf_status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 @api_view(['GET'])
 def list_requests(request):
