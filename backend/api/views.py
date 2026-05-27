@@ -108,6 +108,14 @@ def get_request(request, request_id):
             detail=query("SELECT reason,monthly_income,num_dependents,for_medical,for_scholarship,for_burial,for_legal_aid,for_government_aid,beneficiary_name,beneficiary_relation,requesting_institution FROM indigency_details WHERE request_id=%s",(rid,)); data['detail']=_s(detail)
         elif ct=='Certificate of Residency':
             detail=query("SELECT purpose,years_of_residency,months_of_residency,born_in_barangay,previous_address,requested_for,requested_for_relation,for_enrollment,for_employment,for_voter_reg,for_bank,for_utility,requesting_institution FROM residency_details WHERE request_id=%s",(rid,)); data['detail']=_s(detail)
+        elif ct in ('BUS. PERMIT', 'BUS. CLEARANCE NEW', 'BUS. CLEARANCE RENEWAL'):
+            detail = query(
+                "SELECT purpose, nature_of_business, business_name, "
+                "business_contact_number, capital_invested, gross_sales, "
+                "fee_amount, doc_stamps FROM business_details WHERE request_id=%s",
+                (rid,)
+            )
+            data['detail'] = _s(detail)
         logs=query(
             "SELECT sl.old_status, sl.new_status, sl.notes, sl.changed_at, "
             "COALESCE(s.full_name, 'System') AS changed_by "
